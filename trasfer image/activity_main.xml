@@ -22,14 +22,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btn"
-        android:text="send"/>
+        android:onClick="picClicked"
+        android:text="사진 찍기"/>
 
 
     <ImageView
-        android:id="@+id/image"
+        android:id="@+id/picture"
+        android:layout_width="500px"
+        android:layout_height="500px"
+        android:src="@drawable/blocks" />
+
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/blocks" />
+        android:id="@+id/sendbtn"
+        android:onClick="SendToServer"
+        android:text="서버로 보내기"/>
 
 
 </LinearLayout>
