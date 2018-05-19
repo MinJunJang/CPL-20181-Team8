@@ -4,11 +4,36 @@ from os.path import exists
 HOST = ''
 PORT = 9999
 
-
 class MyTcpHandler(socketserver.BaseRequestHandler):
+    def getFileFromClient(self, filename):
+        data_transferred = 0
+        data = self.request.recv(1024)
+        print("안녕")
+        print(data)
+        if not data:
+            print('서버에 존재하지 않거나 전송중 오류발생')
+            return
+
+        with open('download/' + filename+".jpg", 'wb') as f:
+            try:
+                while data:
+                    print(data)
+                    f.write(data)
+                    data_transferred += len(data)
+                    data = self.request.recv(1024)
+            except Exception as e:
+                print(e)
+
+        print('파일[%s] 전송종료. 전송량 [%d]' % (filename, data_transferred))
+
+
     def handle(self):
         data_transferred = 0
         print('[%s] 연결됨' % self.client_address[0])
+
+        filename = input('받을 파일이름을 입력하세요:')
+
+        self.getFileFromClient(filename)
 
         filename = self.request.recv(1024)  # 클라이언트로 부터 파일이름을 전달받음
         filename = filename.decode()  # 파일이름 이진 바이트 스트림 데이터를 일반 문자열로 변환
@@ -30,6 +55,7 @@ class MyTcpHandler(socketserver.BaseRequestHandler):
         print('전송완료[%s], 전송량[%d]' % (filename, data_transferred))
 
 
+
 def runServer():
     print('++++++파일 서버를 시작++++++')
     print("+++파일 서버를 끝내려면 'Ctrl + C'를 누르세요.")
@@ -42,3 +68,5 @@ def runServer():
 
 
 runServer()
+
+
